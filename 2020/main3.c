@@ -12,7 +12,6 @@ int test (FILE *fp, int x, int right, int down, int divisor) {
 		}
 	        row++;
 	}
-	printf("%d %d %d %d %c %d %d\n", x, right, down, divisor, buf[x], trees, row);
 	fseek(fp, 0, SEEK_SET);
 	return trees;
 }
