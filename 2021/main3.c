@@ -14,8 +14,8 @@ int main() {
   fseek(fp, 0, SEEK_SET);
 
   char *input;
-  int *most_common_bit, bitcount, i, j, gamma=0, epsilon=0;
-  
+  int *most_common_bit, bitcount, i, j, gamma = 0, epsilon = 0;
+
   input = (char *)malloc(sizeof(char) * (filesize + 1));
   if (input == NULL) {
     puts("Malloc failed\n");
@@ -26,13 +26,14 @@ int main() {
   input[filesize] = '\0';
 
   char *ptr = input;
-  for (bitcount = 0; *ptr != '\n'; bitcount++, ptr++);
+  for (bitcount = 0; *ptr != '\n'; bitcount++, ptr++)
+    ;
   if (bitcount == 0) {
     puts("Invalid input format, must not start with '\n'");
     exit(-1);
   }
 
-  //Part One
+  // Part One
   //
   most_common_bit = (int *)calloc(bitcount, sizeof(int));
   if (most_common_bit == NULL) {
@@ -55,7 +56,25 @@ int main() {
   printf("Part One: %d\n", gamma * epsilon);
 
   // Part Two
-
+  for (i=bitcount-1; i >=0; --i) {
+    most_common_bit[i] = 0;
+  }
+  
+  char *inputcpy = malloc(filesize * sizeof(char));
+  char *filter = malloc(filesize * sizeof(char));
+  char *word;
+  strcpy(inputcpy, input);
+  strcpy(filter, "");
+  
+  while (strlen(filter)>bitcount+1){
+    for (ptr = inputcpy; *ptr != '\0'; ptr++) {
+      int i = 0;
+      while (*ptr != '\n') {
+        most_common_bit[i++] += *(ptr++) == '1' ? 1 : -1;
+      }
+    }
+  } 
+  
   // Clean Up
   free(input);
   free(most_common_bit);
