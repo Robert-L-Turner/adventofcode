@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main() {
+char * read_input(void) {
   FILE *fp;
   if ((fp = fopen("input3", "r")) == NULL) {
     puts("Error reading file\n");
@@ -14,7 +14,6 @@ int main() {
   fseek(fp, 0, SEEK_SET);
 
   char *input;
-  int *most_common_bit, bitcount, i, j, gamma = 0, epsilon = 0;
 
   input = (char *)malloc(sizeof(char) * (filesize + 1));
   if (input == NULL) {
@@ -24,7 +23,13 @@ int main() {
 
   fread(input, filesize, 1, fp);
   input[filesize] = '\0';
+  fclose(fp);
+  return input;
+}
 
+void part_one(char * input) {
+  int *most_common_bit, bitcount, i, j, gamma = 0, epsilon = 0;
+  
   char *ptr = input;
   for (bitcount = 0; *ptr != '\n'; bitcount++, ptr++)
     ;
@@ -32,9 +37,7 @@ int main() {
     puts("Invalid input format, must not start with '\n'");
     exit(-1);
   }
-
-  // Part One
-  //
+  
   most_common_bit = (int *)calloc(bitcount, sizeof(int));
   if (most_common_bit == NULL) {
     puts("Malloc failed\n");
@@ -54,14 +57,21 @@ int main() {
   }
 
   printf("Part One: %d\n", gamma * epsilon);
+  free(most_common_bit);
+
+}
+int main() {
+  char * input = read_input();
+  part_one(input);
 
   // Part Two
+  /*  
   for (i=bitcount-1; i >=0; --i) {
     most_common_bit[i] = 0;
   }
   
-  char *inputcpy = malloc(filesize * sizeof(char));
-  char *filter = malloc(filesize * sizeof(char));
+  char *inputcpy = malloc(strlen(input) * sizeof(char));
+  char *filter = malloc(strlen(input) * sizeof(char));
   char *word;
   strcpy(inputcpy, input);
   strcpy(filter, "");
@@ -74,8 +84,7 @@ int main() {
       }
     }
   } 
-  
+  */ 
   // Clean Up
   free(input);
-  free(most_common_bit);
 }
